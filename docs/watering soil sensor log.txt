@@ -1,0 +1,167 @@
+Fan OFF
+RAW:3149  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.20%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3147  Moisture:18%  State:DRY  Temp:19.40C  Humi:28.20%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3150  Moisture:18%  State:DRY  Temp:19.40C  Humi:28.10%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3150  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.80%  Lux:30.8
+Fan ON
+Fan OFF
+RAW:3150  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.50%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3148  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.40%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3150  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.20%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3147  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.00%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3149  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.80%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3145  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.70%  Lux:32.5
+Fan ON
+Fan OFF
+RAW:3151  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.80%  Lux:32.5
+Fan ON
+Fan OFF
+RAW:3147  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.80%  Lux:32.5
+Fan ON
+Fan OFF
+RAW:3151  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.90%  Lux:32.5
+Fan ON
+Fan OFF
+RAW:3149  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.80%  Lux:31.7
+Fan ON
+RAW:3149  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.80%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3148  Moisture:18%  State:DRY  Temp:19.40C  Humi:26.90%  Lux:31.7
+Fan ON
+Fan OFF
+RAW:3159  Moisture:17%  State:DRY  Temp:19.40C  Humi:27.80%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:3158  Moisture:18%  State:DRY  Temp:19.40C  Humi:27.90%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:3157  Moisture:18%  State:DRY  Temp:19.30C  Humi:27.80%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:3162  Moisture:17%  State:DRY  Temp:19.30C  Humi:27.70%  Lux:17.5
+Fan ON
+Fan OFF
+RAW:3159  Moisture:17%  State:DRY  Temp:19.30C  Humi:27.60%  Lux:29.2
+Fan ON
+Fan OFF
+RAW:3152  Moisture:18%  State:DRY  Temp:19.30C  Humi:27.50%  Lux:28.3
+Fan ON
+Fan OFF
+RAW:3153  Moisture:18%  State:DRY  Temp:19.30C  Humi:27.40%  Lux:28.3
+Fan ON
+Fan OFF
+RAW:3150  Moisture:18%  State:DRY  Temp:19.30C  Humi:27.90%  Lux:23.3
+Fan ON
+Fan OFF
+RAW:3026  Moisture:24%  State:DRY  Temp:19.30C  Humi:27.70%  Lux:21.7
+Fan ON
+Fan OFF
+RAW:3011  Moisture:25%  State:DRY  Temp:19.30C  Humi:27.50%  Lux:21.7
+Fan ON
+Fan OFF
+RAW:2956  Moisture:28%  State:DRY  Temp:19.30C  Humi:27.70%  Lux:18.3
+Fan ON
+Fan OFF
+RAW:2531  Moisture:51%  State:OK   Temp:19.40C  Humi:27.60%  Lux:21.7
+Fan ON
+Fan OFF
+RAW:2036  Moisture:77%  State:WET  Temp:19.40C  Humi:28.90%  Lux:22.5
+Fan ON
+Fan OFF
+RAW:1955  Moisture:81%  State:WET  Temp:19.30C  Humi:29.70%  Lux:22.5
+Fan ON
+Fan OFF
+RAW:1984  Moisture:79%  State:WET  Temp:19.40C  Humi:31.00%  Lux:29.2
+Fan ON
+Fan OFF
+RAW:2151  Moisture:71%  State:WET  Temp:19.40C  Humi:32.20%  Lux:26.7
+Fan ON
+Fan OFF
+RAW:2175  Moisture:69%  State:OK   Temp:19.40C  Humi:33.20%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2202  Moisture:68%  State:OK   Temp:19.40C  Humi:33.10%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2219  Moisture:67%  State:OK   Temp:19.40C  Humi:32.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2228  Moisture:66%  State:OK   Temp:19.40C  Humi:31.50%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2231  Moisture:66%  State:OK   Temp:19.40C  Humi:30.70%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2231  Moisture:66%  State:OK   Temp:19.40C  Humi:30.00%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2234  Moisture:66%  State:OK   Temp:19.40C  Humi:29.60%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2235  Moisture:66%  State:OK   Temp:19.40C  Humi:29.40%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2238  Moisture:66%  State:OK   Temp:19.40C  Humi:28.90%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2238  Moisture:66%  State:OK   Temp:19.40C  Humi:28.40%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2239  Moisture:66%  State:OK   Temp:19.40C  Humi:28.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2239  Moisture:66%  State:OK   Temp:19.40C  Humi:28.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2242  Moisture:66%  State:OK   Temp:19.40C  Humi:28.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2242  Moisture:66%  State:OK   Temp:19.40C  Humi:28.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2239  Moisture:66%  State:OK   Temp:19.40C  Humi:28.30%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2250  Moisture:65%  State:OK   Temp:19.40C  Humi:28.10%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2245  Moisture:66%  State:OK   Temp:19.30C  Humi:27.90%  Lux:33.3
+Fan ON
+Fan OFF
+RAW:2240  Moisture:66%  State:OK   Temp:19.40C  Humi:27.60%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2245  Moisture:66%  State:OK   Temp:19.40C  Humi:27.40%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2244  Moisture:66%  State:OK   Temp:19.40C  Humi:27.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2244  Moisture:66%  State:OK   Temp:19.30C  Humi:27.20%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2242  Moisture:66%  State:OK   Temp:19.30C  Humi:27.10%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2240  Moisture:66%  State:OK   Temp:19.40C  Humi:27.00%  Lux:34.2
+Fan ON
+Fan OFF
+RAW:2248  Moisture:65%  State:OK   Temp:19.30C  Humi:27.10%  Lux:35.0
+Fan ON

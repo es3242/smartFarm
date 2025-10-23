@@ -1,0 +1,64 @@
+2025-10-23 02:41:26  Fan OFF
+2025-10-23 02:41:29  RAW:2486  Moisture:53%  State:OK   Temp:18.80C  Humi:27.70%  Lux:40.8
+2025-10-23 02:41:29  Fan ON
+2025-10-23 02:41:32  Fan OFF
+2025-10-23 02:41:35  RAW:2486  Moisture:53%  State:OK   Temp:18.80C  Humi:27.70%  Lux:41.7
+2025-10-23 02:41:36  Fan ON
+2025-10-23 02:41:39  Fan OFF
+2025-10-23 02:41:42  RAW:2487  Moisture:53%  State:OK   Temp:18.80C  Humi:27.70%  Lux:32.5
+2025-10-23 02:41:42  Fan ON
+2025-10-23 02:41:45  Fan OFF
+2025-10-23 02:41:48  RAW:2484  Moisture:53%  State:OK   Temp:18.80C  Humi:27.80%  Lux:40.0
+2025-10-23 02:41:49  Fan ON
+2025-10-23 02:41:52  Fan OFF
+2025-10-23 02:41:55  RAW:2487  Moisture:53%  State:OK   Temp:18.80C  Humi:27.80%  Lux:39.2
+2025-10-23 02:41:55  Fan ON
+2025-10-23 02:41:58  Fan OFF
+2025-10-23 02:42:01  RAW:2481  Moisture:53%  State:OK   Temp:18.80C  Humi:27.80%  Lux:38.3
+2025-10-23 02:42:02  Fan ON
+2025-10-23 02:42:05  Fan OFF
+2025-10-23 02:42:08  RAW:2488  Moisture:53%  State:OK   Temp:18.80C  Humi:27.80%  Lux:38.3
+2025-10-23 02:42:09  Fan ON
+2025-10-23 02:42:12  Fan OFF
+2025-10-23 02:42:15  RAW:2484  Moisture:53%  State:OK   Temp:18.80C  Humi:27.90%  Lux:38.3
+2025-10-23 02:42:15  Fan ON
+2025-10-23 02:42:18  Fan OFF
+2025-10-23 02:42:21  RAW:2488  Moisture:53%  State:OK   Temp:18.80C  Humi:27.90%  Lux:38.3
+2025-10-23 02:42:22  Fan ON
+2025-10-23 02:42:25  Fan OFF
+2025-10-23 02:42:28  RAW:2489  Moisture:53%  State:OK   Temp:18.80C  Humi:27.90%  Lux:39.2
+2025-10-23 02:42:28  Fan ON
+2025-10-23 02:42:31  Fan OFF
+2025-10-23 02:42:34  RAW:2482  Moisture:53%  State:OK   Temp:18.80C  Humi:27.90%  Lux:37.5
+2025-10-23 02:42:35  Fan ON
+2025-10-23 02:42:38  Fan OFF
+2025-10-23 02:42:41  RAW:2486  Moisture:53%  State:OK   Temp:18.80C  Humi:28.20%  Lux:41.7
+2025-10-23 02:42:41  Fan ON
+2025-10-23 02:42:44  Fan OFF
+2025-10-23 02:42:48  RAW:2487  Moisture:53%  State:OK   Temp:18.80C  Humi:28.10%  Lux:41.7
+2025-10-23 02:42:48  Fan ON
+2025-10-23 02:42:51  Fan OFF
+2025-10-23 02:42:54  RAW:2486  Moisture:53%  State:OK   Temp:18.80C  Humi:27.90%  Lux:41.7
+2025-10-23 02:42:55  Fan ON
+2025-10-23 02:42:58  Fan OFF
+2025-10-23 02:43:01  RAW:2473  Moisture:54%  State:OK   Temp:18.80C  Humi:27.80%  Lux:41.7
+2025-10-23 02:43:01  Fan ON
+2025-10-23 02:43:04  Fan OFF
+2025-10-23 02:43:07  RAW:2489  Moisture:53%  State:OK   Temp:18.80C  Humi:27.70%  Lux:41.7
+2025-10-23 02:43:08  Fan ON
+2025-10-23 02:43:11  Fan OFF
+2025-10-23 02:43:14  RAW:2489  Moisture:53%  State:OK   Temp:18.80C  Humi:27.60%  Lux:41.7
+2025-10-23 02:43:14  Fan ON
+2025-10-23 02:43:17  Fan OFF
+2025-10-23 02:43:20  RAW:2489  Moisture:53%  State:OK   Temp:18.80C  Humi:27.60%  Lux:41.7
+2025-10-23 02:43:21  Fan ON
+2025-10-23 02:43:24  Fan OFF
+2025-10-23 02:43:27  RAW:2494  Moisture:52%  State:OK   Temp:18.80C  Humi:27.50%  Lux:37.5
+2025-10-23 02:43:27  Fan ON
+2025-10-23 02:43:30  Fan OFF
+2025-10-23 02:43:34  RAW:2488  Moisture:53%  State:OK   Temp:18.70C  Humi:27.50%  Lux:36.7
+2025-10-23 02:43:34  Fan ON
+2025-10-23 02:43:37  Fan OFF
+2025-10-23 02:43:40  RAW:2491  Moisture:53%  State:OK   Temp:18.70C  Humi:27.70%  Lux:37.5
+2025-10-23 02:43:41  Fan ON
+2025-10-23 02:43:44  Fan OFF

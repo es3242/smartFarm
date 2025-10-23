@@ -51,7 +51,7 @@ void printRightAligned(Adafruit_SSD1306& d, int x_right, int y, const String& s,
 }
 
 void setup() {
-  pinMode(FAN_PIN, OUTPUT);
+  //pinMode(FAN_PIN, OUTPUT);
   Serial.begin(115200);
 
   // ledcAttach(FAN_PIN, FREQ, RES);                 // 채널 지정 없이 핀에 직접 연결
@@ -90,13 +90,13 @@ void drawBar(int percent) {
 */
 
 void loop() {
-  digitalWrite(FAN_PIN, HIGH);   // 팬 켜기
-  Serial.println("Fan ON");
-  delay(3000);                   // 3초 대기
+  // digitalWrite(FAN_PIN, HIGH);   // 팬 켜기
+  // Serial.println("Fan ON");
+  // delay(3000);                   // 3초 대기
 
-  digitalWrite(FAN_PIN, LOW);    // 팬 끄기
-  Serial.println("Fan OFF");
-  delay(3000);                   // 3초 대기
+  // digitalWrite(FAN_PIN, LOW);    // 팬 끄기
+  // Serial.println("Fan OFF");
+  // delay(3000);                   // 3초 대기
   
   // ---- 토양 평균샘플 ----
   long acc = 0;
