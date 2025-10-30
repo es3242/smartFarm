@@ -1,38 +1,13 @@
-#include <Arduino.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <Wire.h>
-#include <BH1750.h>
-#include <DHT.h>
-
-#define DHTPIN   5        // DHT22 DATA → GPIO5
-
-const int FAN_PIN = 26;  // ESP32 → MOSFET PWM+ 에 연결한 GPIO
-const uint32_t FREQ = 25000;
-const uint8_t  RES  = 10;
-
-#define DHTTYPE  DHT22
+#include <main.h>
 
 DHT dht(DHTPIN, DHTTYPE);
 BH1750 lightMeter;  
-
-float g_tempC = NAN, g_humi = NAN;
-unsigned long g_lastDht = 0;
-const unsigned long DHT_PERIOD = 2000; // 최소 2초 간격 권장
-// --- DHT22 additions ---
-
-// OLED 세팅 (네가 쓰는 값 유지)
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+WebServer server(80); 
+Servo servo;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-// 토양센서
-const int SOIL_PIN = 34;
-const int NUM_SAMPLES = 8;
-
-// 네가 이미 가지고 있는 함수들 가정
 int rawToPercent(int raw) {
-  // 네 스케치에 있는 변환 로직 그대로 사용하면 됨
+  // 스케치에 있는 변환 로직 그대로 사용하면 됨
   // 예시:  (필요시 네가 쓰던 식으로 대체)
   // 4095(건조) -> 0%,  1500(젖음) -> 100% 등
   int p = map(raw, 3500, 1600, 0, 100); // 대략 예시값
@@ -50,9 +25,33 @@ void printRightAligned(Adafruit_SSD1306& d, int x_right, int y, const String& s,
   d.print(s);
 }
 
+
+
+
+
+
+
+
+
 void setup() {
   //pinMode(FAN_PIN, OUTPUT);
+
+  // setup() 내 server.begin() 전에
+  server.on("/cfg", HTTP_GET,  handleCfgGet);
+  server.on("/cfg", HTTP_POST, handleCfgPost);
+
   Serial.begin(115200);
+
+  servo.setPeriodHertz(servo_freq);
+
+  servo.attach(servoPin, minUS, maxUS);
+  Serial.println("Servo test start");
+
+  servo.write(90); // 중앙
+
+
+
+
 
   // ledcAttach(FAN_PIN, FREQ, RES);                 // 채널 지정 없이 핀에 직접 연결
   // ledcWrite(FAN_PIN, (1U << RES) - 1);            // 100% 듀티 (10bit면 1023)
@@ -70,7 +69,29 @@ void setup() {
   dht.begin();
   lightMeter.begin();    // [추가] BH1750 초기화
 
-  analogReadResolution(12);  // ESP32 기본 12bit
+  //web
+    // Wi-Fi 연결 (값 바꿔줘)
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(wifi_ssid,wifi_pwd);
+  unsigned long t0 = millis();
+  while(WiFi.status()!=WL_CONNECTED && millis()-t0<8000) delay(200);
+  Serial.println(WiFi.localIP());
+
+  // LittleFS 마운트
+  if(!LittleFS.begin(true)){
+    Serial.println("LittleFS mount failed");
+  } else {
+    Serial.println("LittleFS mounted");
+  }
+
+  // 라우팅
+  server.on("/status", handleStatus);
+  server.on("/act", handleAct);
+  server.onNotFound([](){ handleFileRead(server.uri()); });
+  server.begin();
+  Serial.println("HTTP server started");
+
+
 }
 
 void drawBar(int percent) {
@@ -89,15 +110,10 @@ void drawBar(int percent) {
 }
 */
 
-void loop() {
-  // digitalWrite(FAN_PIN, HIGH);   // 팬 켜기
-  // Serial.println("Fan ON");
-  // delay(3000);                   // 3초 대기
 
-  // digitalWrite(FAN_PIN, LOW);    // 팬 끄기
-  // Serial.println("Fan OFF");
-  // delay(3000);                   // 3초 대기
-  
+void loop() {
+  //servoTest();
+
   // ---- 토양 평균샘플 ----
   long acc = 0;
   for (int i = 0; i < NUM_SAMPLES; ++i) {
@@ -195,4 +211,7 @@ void loop() {
   display.display();
 
   delay(500); // DHT는 millis로 2초 주기라 이 딜레이 유지해도 OK
+
+  server.handleClient();
+
 }
