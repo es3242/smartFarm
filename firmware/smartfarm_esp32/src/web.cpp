@@ -66,7 +66,7 @@ void handleStatus(){
 void handleAct(){
   if(server.hasArg("fan")){
     int v = server.arg("fan").toInt();
-    pinMode(FAN_PIN, OUTPUT);
+    //pinMode(FAN_PIN, OUTPUT);
     digitalWrite(FAN_PIN, v?HIGH:LOW);
   }
   server.send(204);

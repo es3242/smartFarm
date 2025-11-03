@@ -12,6 +12,7 @@
 #include <keys.h>
 #include <test.h>
 #include <config.h>
+#include <func_soil.h>
 
 // #include <Servo.h>
 

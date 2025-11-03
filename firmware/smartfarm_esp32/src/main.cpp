@@ -6,32 +6,18 @@ WebServer server(80);
 Servo servo;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-int rawToPercent(int raw) {
-  // 스케치에 있는 변환 로직 그대로 사용하면 됨
-  // 예시:  (필요시 네가 쓰던 식으로 대체)
-  // 4095(건조) -> 0%,  1500(젖음) -> 100% 등
-  int p = map(raw, 3500, 1600, 0, 100); // 대략 예시값
-  p = constrain(p, 0, 100);
-  return p;
-}
+
 // 유틸
 int textWidthPx(const String& s, uint8_t size=1) {
   return s.length() * 6 * size; // 기본폰트 6px 폭
 }
+
 void printRightAligned(Adafruit_SSD1306& d, int x_right, int y, const String& s, uint8_t size=1) {
   int w = textWidthPx(s, size);
   d.setTextSize(size);
   d.setCursor(x_right - w, y);
   d.print(s);
 }
-
-
-
-
-
-
-
-
 
 void setup() {
   //pinMode(FAN_PIN, OUTPUT);
@@ -115,18 +101,13 @@ void loop() {
   //servoTest();
 
   // ---- 토양 평균샘플 ----
-  long acc = 0;
-  for (int i = 0; i < NUM_SAMPLES; ++i) {
-    acc += analogRead(SOIL_PIN);
-    delay(5);
-  }
-  int raw = acc / NUM_SAMPLES;
-  int percent = rawToPercent(raw);
 
-  // 상태 문구 (네 스케치 로직 유지)
-  const char* state =
-      (percent >= 70) ? "WET" :
-      (percent >= 40) ? "OK " : "DRY";
+  int soilraw = get_soilraw();
+
+  int percent = rawToPercent(soilraw);
+
+  // 상태 문구
+  const char* state = getSoilState(percent);
 
   // --- DHT22 additions --- (비차단 주기 측정)
   unsigned long now = millis();
@@ -146,7 +127,7 @@ void loop() {
 
 
   // ---- 시리얼 출력  ----
-  Serial.print("RAW:"); Serial.print(raw);
+  Serial.print("RAW:"); Serial.print(soilraw);
   Serial.print("  Moisture:"); Serial.print(percent); Serial.print("%  State:"); Serial.print(state);
   Serial.print("  Temp:"); Serial.print(isnan(g_tempC)? -999 : g_tempC);
   Serial.print("C  Humi:"); Serial.print(isnan(g_humi)? -999 : g_humi); Serial.print("%");
@@ -176,7 +157,7 @@ void loop() {
   display.setTextSize(1);
   display.setCursor(Lx, 16);
   display.print("RAW");
-  printRightAligned(display, Rx, 16, String(raw), 1);
+  printRightAligned(display, Rx, 16, String(soilraw), 1);
 
   // 2행 (y=28)
   display.setCursor(Lx, 28);

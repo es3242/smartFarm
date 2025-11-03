@@ -10,6 +10,7 @@ extern const int DHTPIN;       // DHT22 DATA → GPIO5
 extern const int DHTTYPE;
 
 extern const int FAN_PIN;  // ESP32 → MOSFET PWM+ 에 연결한 GPIO
+extern const int FAN_ACTIVE_LOW;
 
 extern const int SOIL_PIN;
 
