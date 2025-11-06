@@ -1,5 +1,4 @@
 # ignore keys
-/include/keys.h
 /src/keys.cpp
 
 .pio
