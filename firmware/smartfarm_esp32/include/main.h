@@ -10,6 +10,7 @@
 #include <web.h>
 #include <WiFi.h>
 #include <keys.h>
+#include <fan.h>
 #include <test.h>
 #include <config.h>
 #include <func_soil.h>

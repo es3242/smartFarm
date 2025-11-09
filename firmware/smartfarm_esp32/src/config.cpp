@@ -1,5 +1,6 @@
-
 #include <config.h>  
+
+//sda -> 21, sdl -> 22
 
 const uint32_t FREQ = 25000;
 const uint8_t  RES  = 10;

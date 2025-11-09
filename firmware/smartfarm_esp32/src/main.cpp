@@ -20,6 +20,7 @@ void printRightAligned(Adafruit_SSD1306& d, int x_right, int y, const String& s,
 }
 
 void setup() {
+  fan_init();
   //pinMode(FAN_PIN, OUTPUT);
 
   // setup() 내 server.begin() 전에
@@ -192,6 +193,7 @@ void loop() {
   display.display();
 
   delay(500); // DHT는 millis로 2초 주기라 이 딜레이 유지해도 OK
+
 
   server.handleClient();
 

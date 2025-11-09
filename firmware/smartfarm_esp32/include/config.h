@@ -1,6 +1,6 @@
-
 #pragma once
 #include <DHT.h>  // DHT22 매크로 정의 포함
+#include <Arduino.h> 
 
 extern const uint32_t FREQ;
 extern const uint8_t  RES;
