@@ -12,6 +12,8 @@ const int DHTTYPE = DHT22;
 const int FAN_PIN = 26;  // ESP32 → MOSFET PWM+ 에 연결한 GPIO
 const int FAN_ACTIVE_LOW = 25;
 
+extern const int WATER_PUMP = 18;
+
 const int SOIL_PIN = 34;
 
 const int  servoPin = 13;
@@ -34,3 +36,5 @@ const unsigned long DHT_PERIOD = 2000; // 최소 2초 간격 권장
 
 const int SCREEN_WIDTH =128;
 const int SCREEN_HEIGHT =64;
+
+const int pumpon_offset = 4; //time(sec) that pump takes to release water from the end;;

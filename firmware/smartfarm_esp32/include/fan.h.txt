@@ -1,4 +1,6 @@
-// fan.h
+#include <Arduino.h>
+#include "config.h"
+
 #pragma once
 void fan_init();           // pinMode 등 1회
 

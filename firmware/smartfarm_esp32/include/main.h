@@ -14,6 +14,7 @@
 #include <test.h>
 #include <config.h>
 #include <func_soil.h>
+#include <water_pump.h>
 
 // #include <Servo.h>
 
