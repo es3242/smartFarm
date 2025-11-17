@@ -35,3 +35,29 @@ Read more about using header files in official GCC documentation:
 * Computed Includes
 
 https://gcc.gnu.org/onlinedocs/cpp/Header-Files.html
+
+통신규칙
+
+네임스페이스: smartfarm/<shelf> (예: smartfarm/top, smartfarm/mid)
+
+토픽
+
+센서: soil_moisture (std_msgs/Float32)
+
+상태: pump_state (std_msgs/Bool)
+
+하트비트: heartbeat (std_msgs/UInt32)
+
+명령
+
+펌프 제어: pump_cmd (std_msgs/Bool) → true:on/false:off
+
+QoS
+
+명령/상태: Reliable
+
+센서/하트비트: BestEffort(UDP 안정성 위해)
+
+주기
+
+센서 1–2s, 하트비트 5s

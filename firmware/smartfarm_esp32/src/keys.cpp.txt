@@ -1,4 +1,0 @@
-#include <Arduino.h>
-
-extern const char* wifi_ssid = "im jokin";
-extern const char* wifi_pwd = "eunsil3242";

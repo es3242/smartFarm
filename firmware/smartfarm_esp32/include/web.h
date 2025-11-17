@@ -4,7 +4,6 @@
 #include <LittleFS.h>
 #include <WebServer.h>
 #include <config.h>
-#include <main.h>
 
 extern WebServer server; 
 
