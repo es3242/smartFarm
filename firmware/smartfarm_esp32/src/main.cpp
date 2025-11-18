@@ -203,7 +203,7 @@
 //   rclc_executor_spin_some(&exec, RCL_MS_TO_NS(5));
 //   delay(5);
 // }
-
+// ====== micro-ROS 추가 ======
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -212,64 +212,191 @@
 #include "keys.h"
 #include "config.h"
 
+// ====== micro-ROS ======
+#include <micro_ros_platformio.h>
+#include <rcl/rcl.h>
+#include <rclc/rclc.h>
+#include <rclc/executor.h>
+#include <std_msgs/msg/int32.h>
+
+// 에러 체크 매크로
+#define RCCHECK(fn) { rcl_ret_t rc = fn; if (rc != RCL_RET_OK) { logLine("[microROS] hard error rc=" + String((int)rc)); error_loop(); } }
+#define RCSOFTCHECK(fn) { rcl_ret_t rc = fn; if (rc != RCL_RET_OK) { logLine("[microROS] soft error rc=" + String((int)rc)); } }
+
+#define AGENT_IP    
+#define AGENT_PORT  8888
+#define HOSTNAME    "midshelf"
+#define NS          "smartfarm/mid"
 
 WiFiUDP logUdp;
+bool loggingReady = false;
+
+
+// ====== micro-ROS 전역 ======
+rclc_support_t support;
+rcl_allocator_t allocator;
+rcl_node_t node;
+rclc_executor_t executor;
+
+rcl_publisher_t pub_hb;
+rcl_timer_t timer_hb;
+std_msgs__msg__Int32 msg_hb;
+uint32_t hb_seq = 0;
 
 void logLine(const String& msg) {
-  // 1) 있으면 USB 시리얼에도 찍고
-  Serial.println(msg);
+  Serial.println(msg);   // 시리얼은 항상 찍어도 됨
 
-  // 2) UDP로도 전송
-  logUdp.beginPacket(LOG_SERVER_IP, LOG_SERVER_PORT);
-
-  const char* cmsg = msg.c_str();
-  logUdp.write((const uint8_t*)cmsg, msg.length());
-  logUdp.write('\n');
-
-  logUdp.endPacket();
+  if (loggingReady && WiFi.status() == WL_CONNECTED) {
+    logUdp.beginPacket(LOG_SERVER_IP, LOG_SERVER_PORT);
+    const char* cmsg = msg.c_str();
+    logUdp.write((const uint8_t*)cmsg, msg.length());
+    logUdp.write('\n');
+    logUdp.endPacket();
+  }
 }
+
+
+// ====== micro-ROS heartbeat 콜백 ======
+void hb_timer_callback(rcl_timer_t * timer, int64_t last_call_time) {
+  (void)timer;
+  (void)last_call_time;
+
+  msg_hb.data = (int32_t)hb_seq++;
+  rcl_ret_t rc = rcl_publish(&pub_hb, &msg_hb, NULL);
+
+  if (rc == RCL_RET_OK) {
+    if (hb_seq % 5 == 0) {  // 너무 많이 안 찍게 5번에 한 번만
+      logLine("[microROS] heartbeat: " + String(msg_hb.data));
+    }
+  } else {
+    logLine("[microROS] publish error: " + String((int)rc));
+  }
+}
+
+// ====== micro-ROS 최소 초기화 ======
+void microRosInit() {
+  logLine("[microROS] init start");
+
+  // WiFi는 이미 붙어 있으니까 UDP transport만 설정
+
+  IPAddress agent_ip(192, 168, 1, 46);   // <- 네 AGENT_IP 숫자로 맞춰서
+  set_microros_wifi_transports(
+      (char*)wifi_ssid,                  // const char* → char* 캐스팅
+      (char*)wifi_pwd,
+      agent_ip,
+      AGENT_PORT
+  );
+
+  allocator = rcl_get_default_allocator();
+
+  rcl_ret_t rc = rclc_support_init(&support, 0, NULL, &allocator);
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] support_init failed: " + String((int)rc));
+    return;
+  }
+
+  rc = rclc_node_init_default(
+        &node,
+        HOSTNAME,   // 노드 이름
+        NS,         // 네임스페이스
+        &support);
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] node_init failed: " + String((int)rc));
+    return;
+  }
+
+  // /smartfarm/mid/heartbeat (Int32, best effort)
+  rc = rclc_publisher_init_best_effort(
+        &pub_hb,
+        &node,
+        ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+        "heartbeat");
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] pub_init failed: " + String((int)rc));
+    return;
+  }
+
+  // 1초마다 타이머
+  rc = rclc_timer_init_default(
+        &timer_hb,
+        &support,
+        RCL_MS_TO_NS(1000),
+        hb_timer_callback);
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] timer_init failed: " + String((int)rc));
+    return;
+  }
+
+  rc = rclc_executor_init(&executor, &support.context, 1, &allocator);
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] executor_init failed: " + String((int)rc));
+    return;
+  }
+
+  rc = rclc_executor_add_timer(&executor, &timer_hb);
+  if (rc != RCL_RET_OK) {
+    logLine("[microROS] add_timer failed: " + String((int)rc));
+    return;
+  }
+
+  logLine("[microROS] init done");
+}
+
+
+
+
+
+
+
+
+
+
+
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  logLine("");
-  logLine("Booting...");
+  Serial.println();
+  Serial.println("Booting...");   // ← 여기서는 굳이 logLine 안 써도 됨
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(wifi_ssid, wifi_pwd);
 
-  logLine("Connecting to WiFi");
+  Serial.println("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    logLine(".");
+    Serial.print(".");
   }
-  logLine("");
-  logLine("WiFi connected, IP: ");
-  logLine(WiFi.localIP().toString());
+  Serial.println();
 
-  logUdp.begin(0);   // 송신만 할 거면 0 써도 됨
+  // WiFi 붙은 후에만 UDP 시작
+  logUdp.begin(0);           // 🔹 여기서 UDP 소켓 열고
+  loggingReady = true;       // 🔹 이제부터 logLine이 UDP 사용 가능
 
+  logLine("WiFi connected, IP: " + WiFi.localIP().toString());
 
-  // OTA 기본 설정
-  ArduinoOTA.setHostname("midshelf"); // 여기 이름은 마음대로
-  // 필요하면 비번도:
-  // ArduinoOTA.setPassword("1234");
+  ArduinoOTA.setHostname("midshelf");
 
   ArduinoOTA.onStart([]() {
     logLine("Start OTA");
   });
   ArduinoOTA.onEnd([]() {
-    logLine("\nEnd OTA");
+    logLine("End OTA");
   });
   ArduinoOTA.onError([](ota_error_t error) {
     logLine("Error[" + String((uint32_t)error) + "]");
   });
 
   ArduinoOTA.begin();
-  logLine("OTA ready!.");
+  logLine("OTA ready!~~~.");
+   // --- micro-ROS 시작 ---
+  microRosInit();
 }
 
 void loop() {
-  ArduinoOTA.handle();   // OTA 업로드 받는 부분
-  delay(10);             // 너무 꽉 잡아먹지 않게 살짝 쉬어주기
+  ArduinoOTA.handle();
+    // micro-ROS 실행 (콜백/타이머)
+  rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
+
+  delay(10);
 }
