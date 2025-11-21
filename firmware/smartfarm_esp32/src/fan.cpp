@@ -4,11 +4,11 @@ bool           fan_on_flag       = false;
 unsigned long  fan_s_changed     = 0;
 
 // 1시간에 20분 ON
-// 필요하면 config.h 쪽으로 옮겨도 됨
-const uint32_t FAN_CYCLE_PERIOD_MS = 60UL * 60UL * 1000UL;   // 1시간
-const uint32_t FAN_ON_DURATION_MS  = 20UL * 60UL * 1000UL;   // 20분
+// 덴버 시간 기준 팬 스케줄
+static const int FAN_START_HOUR = 8;                 // 08:00부터
+static const int FAN_END_HOUR   = 20;                // 20:00까지 (20시는 제외)
+static const int FAN_ON_SECONDS_IN_HOUR = 10 * 60;   // 매시 첫 10분(=600초)
 
-uint32_t       fan_cycle_start_ms = 0;       // 기준 시각
 bool           fan_hw_state       = false;   // 실제 출력 상태
 
 FanMode        fan_mode           = FAN_MODE_AUTO; // 기본은 AUTO 모드
@@ -34,21 +34,48 @@ bool fan_is_fan_on_flag(){ return fan_on_flag; }
 
 unsigned long fan_last_changed(){ return fan_s_changed; }
 
-// millis() 기반 자동 팬 제어
 void fan_auto_update() {
   if (fan_mode != FAN_MODE_AUTO) return;
 
-  uint32_t now = millis();
-  // 부팅 이후 경과 시간 기준으로 주기 계산
-  uint32_t elapsed_in_cycle = (now - fan_cycle_start_ms) % FAN_CYCLE_PERIOD_MS;
+  time_t now;
+  time(&now);
 
-  bool should_on = (elapsed_in_cycle < FAN_ON_DURATION_MS);  // 앞 20분 ON, 나머지 40분 OFF
+  struct tm t;
+  if (localtime_r(&now, &t) == nullptr) {
+    // 아직 시간 동기화가 안 되었거나 에러일 때 → 안전하게 OFF
+    if (fan_hw_state) {
+      fan_hw_state = false;
+      fan_on_flag  = false;
+      fan_off();
+      fan_s_changed = millis();
+    }
+    return;
+  }
+
+  int hour = t.tm_hour;  // 0~23 (덴버 기준, wifi_ota에서 TZ 세팅함)
+  int min  = t.tm_min;   // 0~59
+  int sec  = t.tm_sec;   // 0~59
+
+  // 08:00 ~ 20:00 사이인지
+  bool in_active_hours = (hour >= FAN_START_HOUR && hour < FAN_END_HOUR);
+
+  // 매시 첫 10분(0~599초)인지
+  int sec_in_hour = min * 60 + sec;
+  bool in_first_10min = (sec_in_hour < FAN_ON_SECONDS_IN_HOUR);
+
+  bool should_on = in_active_hours && in_first_10min;
 
   if (should_on != fan_hw_state) {
     fan_hw_state = should_on;
     fan_on_flag  = should_on;
+    fan_s_changed = millis();   // 상태 변경 시각 기록
 
-    if (should_on) fan_on();
-    else           fan_off();
+    if (should_on) {
+      fan_on();
+      logLine("FAN AUTO ON");
+    } else {
+      fan_off();
+      logLine("FAN AUTO OFF");
+    }
   }
 }
