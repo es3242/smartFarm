@@ -39,5 +39,4 @@ const int SCREEN_HEIGHT =64;
 
 const int pumpon_offset = 4; //time(sec) that pump takes to release water from the end;;
 
-extern const char* LOG_SERVER_IP = "192.168.1.106";
-extern const int LOG_SERVER_PORT= 9000;
+

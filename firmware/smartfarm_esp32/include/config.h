@@ -2,6 +2,19 @@
 #include <DHT.h>  // DHT22 매크로 정의 포함
 #include <Arduino.h> 
 
+
+// default
+#ifndef HOSTNAME
+  #define HOSTNAME "smartfarm-node"
+#endif
+
+#ifndef NS
+  #define NS "smartfarm"
+#endif
+
+#define AGENT_PORT 8888
+// 로그 서버, 에이전트 IP 같은 것도 여기 공통으로 두면 됨
+
 extern const uint32_t FREQ;
 extern const uint8_t  RES;
 
