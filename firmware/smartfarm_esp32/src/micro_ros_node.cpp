@@ -56,7 +56,6 @@ static std_msgs__msg__Int32   msg_hb;
 
 // 상태
 static bool pump_on_flag = false;
-static bool fan_on_flag  = false;
 static uint32_t hb_seq   = 0;
 
 // ===== 내부 함수 선언 =====
@@ -83,6 +82,8 @@ static float read_soil_pct() {
 static void soil_timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
   (void)timer;
   (void)last_call_time;
+
+  fan_auto_update();
 
   msg_soil.data = read_soil_pct();
   RCSOFTCHECK(rcl_publish(&pub_soil, &msg_soil, NULL));
@@ -119,14 +120,26 @@ static void pump_cmd_callback(const void* msgin) {
 
 static void fan_cmd_callback(const void* msgin) {
   auto* m = (const std_msgs__msg__Bool*)msgin;
-  fan_on_flag = m->data;
 
-  if (fan_on_flag) fan_on();
-  else             fan_off();
+  if (m->data) {
+    // 수동 강제 ON
+    fan_mode     = FAN_MODE_MANUAL;
+    fan_hw_state = true;
+    fan_on_flag  = true;
+    fan_on();
+  } else {
+    // 자동 모드 복귀
+    fan_mode          = FAN_MODE_AUTO;
+    fan_cycle_start_ms = millis();   // 지금 시점부터 다시 20분/40분 주기 시작
+    // 바로 fan_auto_update 한 번 돌려서 상태 맞추기
+    fan_auto_update();
+  }
 
+  // 현재 상태 퍼블리시
   msg_fan.data = fan_on_flag;
   RCSOFTCHECK(rcl_publish(&pub_fan_state, &msg_fan, NULL));
 }
+
 
 // ===== 외부 노출 함수 =====
 void microRosInit() {
@@ -220,7 +233,7 @@ void microRosInit() {
       &executor,
       &sub_fan_cmd,
       &msg_fan,
-      fan_cmd_callback,
+      fan_cmd_callback,  
       ON_NEW_DATA));
 
   RCCHECK(rclc_executor_add_timer(&executor, &timer_soil));

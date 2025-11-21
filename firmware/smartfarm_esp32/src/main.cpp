@@ -15,8 +15,7 @@ void setup() {
   Serial.println("Booting...");
 
   // 하드웨어 초기화
-  pinMode(FAN_PIN, OUTPUT);
-  fan_off();
+  fan_init();
   pump_init();
 
   // 네트워크/OTA
