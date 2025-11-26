@@ -2,6 +2,9 @@ const API_BASE = "http://192.168.1.46:8000";
 
 const shelfSelect = document.getElementById("shelf-select");
 const ctx = document.getElementById("soilChart").getContext("2d");
+const fanManualBtn = document.getElementById("fan-manual-btn");
+const fanAutoBtn   = document.getElementById("fan-auto-btn");
+const fanStatusEl  = document.getElementById("fan-status");
 
 let soilChart = null;
 
@@ -50,7 +53,32 @@ async function updateChart() {
       },
     },
   });
+    if (data.length > 0) {
+    const latest = data[data.length - 1];
+    const on = latest.fan_state === 1; // DB에 INTEGER로 저장됨 
+    fanStatusEl.textContent = on ? "Fan: ON" : "Fan: OFF (or AUTO OFF)";
+  } else {
+    fanStatusEl.textContent = "(no data yet)";
+  }
 }
+async function sendFanMode(mode) {
+  const shelf = shelfSelect.value;
+  await fetch(`${API_BASE}/api/fan/${shelf}/mode`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ mode }),
+  });
+  // 명령 보낸 뒤에 최신 상태 확인
+  setTimeout(updateChart, 500);
+}
+
+fanManualBtn.addEventListener("click", () => {
+  sendFanMode("manual_on");
+});
+
+fanAutoBtn.addEventListener("click", () => {
+  sendFanMode("auto");
+});
 
 shelfSelect.addEventListener("change", updateChart);
 

@@ -1,4 +1,3 @@
-rclpy
 fastapi
 uvicorn[standard]
 aiosqlite

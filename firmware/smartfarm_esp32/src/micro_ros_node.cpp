@@ -18,6 +18,7 @@
 #include "water_pump.h"  // pump_init(), pump_on(), pump_off()
 #include "log.h"
 #include "micro_ros_node.h"
+#include "oled_display.h"
 
 // ===== macro & 에러 루프 =====
 static void error_loop();
@@ -90,6 +91,8 @@ static void soil_timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
 
   msg_pump.data = pump_on_flag;
   RCSOFTCHECK(rcl_publish(&pub_pump_state, &msg_pump, NULL));
+
+  oled_show_status(msg_soil.data, pump_on_flag, fan_on_flag);
 
 
 }

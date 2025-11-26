@@ -55,6 +55,5 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 //udp log
-// const char* LOG_SERVER_IP = "192.168.1.79";  // laptop
 extern const char* LOG_SERVER_IP ;
 extern const int LOG_SERVER_PORT;

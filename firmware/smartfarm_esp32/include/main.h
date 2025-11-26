@@ -7,7 +7,7 @@
 #include "wifi_ota.h"
 #include "micro_ros_node.h"
 #include "log.h"
-
+#include "oled_display.h"   
 
 
 void setup();

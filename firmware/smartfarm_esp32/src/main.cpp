@@ -1,12 +1,4 @@
-#include <Arduino.h>
-
-#include "config.h"
-#include "fan.h"
-#include "water_pump.h"
-
-#include "wifi_ota.h"
-#include "micro_ros_node.h"
-#include "log.h"
+#include "main.h"
 
 void setup() {
   Serial.begin(115200);
@@ -22,6 +14,7 @@ void setup() {
   wifi_connect();           // WiFi + UDP 로그 시작
   ota_init(HOSTNAME);       // OTA 준비
 
+  oled_init(); 
   // micro-ROS 노드 초기화
   microRosInit();
 }

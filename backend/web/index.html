@@ -10,7 +10,12 @@
 
   <label for="shelf-select">Shelf:</label>
   <select id="shelf-select"></select>
-
+  <div style="margin-top: 16px;">
+    <strong>Fan control:</strong>
+    <button id="fan-manual-btn">Manual ON</button>
+    <button id="fan-auto-btn">Back to AUTO</button>
+    <span id="fan-status" style="margin-left: 8px;">(loading...)</span>
+  </div>
   <canvas id="soilChart" width="600" height="300"></canvas>
 
   <script src="main.js"></script>
