@@ -1,37 +1,11 @@
-```mark down
-# 🌱 SmartFarm Project
+SmartFarm Project
 
-## 📁 Project Structure
-
+## Project Structure
 smartFarm/
 │
 ├── README.md ← Project overview / wiring diagram / result photos
 ├── LICENSE ← MIT License (recommended)
-│
+...
 ├── docs/
-│ ├── wiring_diagram.png ← Wiring diagram
-│ ├── sensor_calibration.md ← Calibration procedure
-│ ├── architecture.png ← System architecture (ESP32, RS-485, Raspberry Pi)
-│ └── demo_screenshot.png ← OLED / Serial output screenshots
-│
-├── hardware/
-│ ├── schematic.pdf ← Circuit diagram (Fritzing or EasyEDA)
-│ └── parts_list.md ← Bill of materials / cost breakdown
-│
-├── firmware/
-│ ├── soil_logger/
-│ │ ├── soil_logger.ino ← ESP32 firmware (current version)
-│ │ └── config.h ← Pin mapping, calibration values, SPIFFS setup
-│ ├── rs485_slave/
-│ │ └── rs485_slave.ino ← RS-485 slave firmware (upcoming)
-│ └── examples/
-│ └── read_soil_serial.ino ← Simple serial read example
-│
-├── raspberrypi/
-│ ├── rs485_master.py ← Raspberry Pi master control script
-│ └── requirements.txt ← Required Python packages (e.g., pymodbus)
-│
-└── data/
-├── soil_log_example.csv ← Sample log exported from SPIFFS
-└── log_visualization.ipynb ← Jupyter notebook for data visualization
-```
+│   ├── wiring_diagram.png ← Wiring diagram
+...
