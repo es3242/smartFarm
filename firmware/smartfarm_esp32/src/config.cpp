@@ -10,7 +10,6 @@ const int DHTPIN = 5;       // DHT22 DATA → GPIO5
 const int DHTTYPE = DHT22;
 
 const int FAN_PIN = 26;  // ESP32 → MOSFET PWM+ 에 연결한 GPIO
-const int FAN_ACTIVE_LOW = 25;
 
 extern const int WATER_PUMP = 18;
 

@@ -15,8 +15,6 @@ void wifi_connect() {
 
   // UDP 로그 시작 (먼저)
   log_init();
-  logLine("WiFi connected, IP: " + WiFi.localIP().toString());
-
   // ===== NTP / 로컬 시간 동기화 (America/Denver 기준) =====
   configTzTime("MST7MDT,M3.2.0/2,M11.1.0/2",
                "pool.ntp.org", "time.google.com");

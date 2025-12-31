@@ -20,6 +20,7 @@
 #include "micro_ros_node.h"
 #include "oled_display.h"
 
+
 // ===== macro & 에러 루프 =====
 static void error_loop();
 
@@ -28,6 +29,14 @@ static void error_loop();
 
 #define RCSOFTCHECK(fn)  { rcl_ret_t rc = fn; if (rc != RCL_RET_OK) { \
   logLine("[microROS] soft error rc=" + String((int)rc)); } }
+
+#define RCCHECK_TAG(fn, tag) {                           \
+  rcl_ret_t rc = fn;                                     \
+  logLine(String("[microROS] ") + tag + " rc=" + String((int)rc)); \
+  if (rc != RCL_RET_OK) {                                \
+    error_loop();                                        \
+  }                                                      \
+}
 
 // ===== micro-ROS 전역 =====
 static rclc_support_t   support;
@@ -59,6 +68,7 @@ static std_msgs__msg__Int32   msg_hb;
 // 상태
 static bool pump_on_flag = false;
 static uint32_t hb_seq   = 0;
+static uint32_t last_oled_ms = 0;
 
 // ===== 내부 함수 선언 =====
 static float read_soil_pct();
@@ -92,11 +102,13 @@ static void soil_timer_callback(rcl_timer_t* timer, int64_t last_call_time) {
   msg_pump.data = pump_on_flag;
   RCSOFTCHECK(rcl_publish(&pub_pump_state, &msg_pump, NULL));
 
-  oled_show_status(msg_soil.data, pump_on_flag, fan_on_flag);
-
-
+ // OLED는 2초마다만 갱신(원하면 5초로)
+  const uint32_t now = millis();
+  if (now - last_oled_ms >= 2000) {
+    oled_show_status(msg_soil.data, pump_on_flag, fan_is_on());
+    last_oled_ms = now;
+  }
 }
-
 static void fan_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 {
     (void)timer;
@@ -160,7 +172,6 @@ static void fan_cmd_callback(const void* msgin) {
 void microRosInit() {
   logLine("[microROS] init start");
 
-  // Agent IP (Ubuntu VM IP)
   IPAddress agent_ip(192, 168, 1, 46);
 
   set_microros_wifi_transports(
@@ -171,96 +182,112 @@ void microRosInit() {
 
   allocator = rcl_get_default_allocator();
 
-  RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
+  RCCHECK_TAG(rclc_support_init(&support, 0, NULL, &allocator),
+              "support_init");
 
-  RCCHECK(rclc_node_init_default(
+  RCCHECK_TAG(rclc_node_init_default(
       &node,
       HOSTNAME,
       NS,
-      &support));
+      &support),
+      "node_init");
 
   // 퍼블리셔
-  RCCHECK(rclc_publisher_init_best_effort(
+  RCCHECK_TAG(rclc_publisher_init_best_effort(
       &pub_soil,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32),
-      "soil_moisture"));
+      "soil_moisture"),
+      "pub_soil");
 
-  RCCHECK(rclc_publisher_init_default(
+  RCCHECK_TAG(rclc_publisher_init_default(
       &pub_pump_state,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Bool),
-      "pump_state"));
+      "pump_state"),
+      "pub_pump_state");
 
-  RCCHECK(rclc_publisher_init_default(
+  RCCHECK_TAG(rclc_publisher_init_default(
       &pub_fan_state,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Bool),
-      "fan_state"));
+      "fan_state"),
+      "pub_fan_state");
 
-  RCCHECK(rclc_publisher_init_best_effort(
+  RCCHECK_TAG(rclc_publisher_init_best_effort(
       &pub_hb,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
-      "heartbeat"));
+      "heartbeat"),
+      "pub_hb");
 
   // 서브스크립션
-  RCCHECK(rclc_subscription_init_default(
+  RCCHECK_TAG(rclc_subscription_init_default(
       &sub_pump_cmd,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Bool),
-      "pump_cmd"));
+      "pump_cmd"),
+      "sub_pump_cmd");
 
-  RCCHECK(rclc_subscription_init_default(
+  RCCHECK_TAG(rclc_subscription_init_default(
       &sub_fan_cmd,
       &node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Bool),
-      "fan_cmd"));
+      "fan_cmd"),
+      "sub_fan_cmd");
 
   // 타이머
-  RCCHECK(rclc_timer_init_default(
+  RCCHECK_TAG(rclc_timer_init_default(
       &timer_soil,
       &support,
       RCL_MS_TO_NS(1000),
-      soil_timer_callback));
+      soil_timer_callback),
+      "timer_soil");
 
-  RCCHECK(rclc_timer_init_default(
+  RCCHECK_TAG(rclc_timer_init_default(
       &timer_hb,
       &support,
       RCL_MS_TO_NS(5000),
-      hb_timer_callback));
+      hb_timer_callback),
+      "timer_hb");
 
-  RCCHECK(rclc_timer_init_default(
-    &timer_fan,
-    &support,
-    RCL_MS_TO_NS(1000),    // 1초 간격 추천
-    fan_timer_callback));
-
+  RCCHECK_TAG(rclc_timer_init_default(
+      &timer_fan,
+      &support,
+      RCL_MS_TO_NS(1000),
+      fan_timer_callback),
+      "timer_fan");
 
   // executor
-  RCCHECK(rclc_executor_init(
+  RCCHECK_TAG(rclc_executor_init(
       &executor,
       &support.context,
-      4,
-      &allocator));
+      8,
+      &allocator),
+      "executor_init");
 
-  RCCHECK(rclc_executor_add_subscription(
+  RCCHECK_TAG(rclc_executor_add_subscription(
       &executor,
       &sub_pump_cmd,
       &msg_pump,
       pump_cmd_callback,
-      ON_NEW_DATA));
+      ON_NEW_DATA),
+      "exec_add_sub_pump");
 
-  RCCHECK(rclc_executor_add_subscription(
+  RCCHECK_TAG(rclc_executor_add_subscription(
       &executor,
       &sub_fan_cmd,
       &msg_fan,
-      fan_cmd_callback,  
-      ON_NEW_DATA));
+      fan_cmd_callback,
+      ON_NEW_DATA),
+      "exec_add_sub_fan");
 
-  RCCHECK(rclc_executor_add_timer(&executor, &timer_soil));
-  RCCHECK(rclc_executor_add_timer(&executor, &timer_hb));
-  RCCHECK(rclc_executor_add_timer(&executor, &timer_fan));  
+  RCCHECK_TAG(rclc_executor_add_timer(&executor, &timer_soil),
+              "exec_add_timer_soil");
+  RCCHECK_TAG(rclc_executor_add_timer(&executor, &timer_hb),
+              "exec_add_timer_hb");
+  RCCHECK_TAG(rclc_executor_add_timer(&executor, &timer_fan),
+              "exec_add_timer_fan");
 
   hb_seq = 0;
   pump_on_flag = false;
@@ -268,6 +295,7 @@ void microRosInit() {
 
   logLine("[microROS] init done");
 }
+
 
 void microRosSpinOnce() {
   rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
